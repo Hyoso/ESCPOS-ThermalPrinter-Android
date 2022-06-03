@@ -31,3 +31,16 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation project(path: ':escposprinter')
 }
+
+task deleteJar(type: Delete) {
+    delete 'libs/jars/escposprintermain.jar'
+}
+
+task createJar(type: Copy) {
+    from('build/intermediates/bundles/release/')
+    into('libs/jars/')
+    include('classes.jar')
+    rename('classes.jar', 'escposprintermain.jar')
+}
+
+createJar.dependsOn(deleteJar, build)

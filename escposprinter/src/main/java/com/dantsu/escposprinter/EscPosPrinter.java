@@ -1,6 +1,11 @@
 package com.dantsu.escposprinter;
 
+import android.util.Log;
+import android.util.LogPrinter;
+
 import com.dantsu.escposprinter.connection.DeviceConnection;
+import com.dantsu.escposprinter.connection.bluetooth.BluetoothConnection;
+import com.dantsu.escposprinter.connection.bluetooth.BluetoothPrintersConnections;
 import com.dantsu.escposprinter.exceptions.EscPosBarcodeException;
 import com.dantsu.escposprinter.exceptions.EscPosConnectionException;
 import com.dantsu.escposprinter.exceptions.EscPosEncodingException;
@@ -11,9 +16,21 @@ import com.dantsu.escposprinter.textparser.IPrinterTextParserElement;
 import com.dantsu.escposprinter.textparser.PrinterTextParserLine;
 import com.dantsu.escposprinter.textparser.PrinterTextParserString;
 
+import java.util.logging.Logger;
+
 public class EscPosPrinter extends EscPosPrinterSize {
 
     private EscPosPrinterCommands printer = null;
+
+    public static void TestFunc()
+    {
+        Log.i("Unity", "something from java");
+    }
+
+    public void TestNonStaticFunc()
+    {
+        Log.i("Unity", "non static func from java");
+    }
 
     /**
      * Create new instance of EscPosPrinter.
@@ -26,6 +43,21 @@ public class EscPosPrinter extends EscPosPrinterSize {
     public EscPosPrinter(DeviceConnection printerConnection, int printerDpi, float printerWidthMM, int printerNbrCharactersPerLine) throws EscPosConnectionException {
         this(printerConnection != null ? new EscPosPrinterCommands(printerConnection) : null, printerDpi, printerWidthMM, printerNbrCharactersPerLine);
     }
+
+    public EscPosPrinter() throws EscPosConnectionException {
+        this(BluetoothPrintersConnections.selectFirstPaired() != null ? new EscPosPrinterCommands(BluetoothPrintersConnections.selectFirstPaired()) : null, 203, 58f, 32);
+    }
+
+    public EscPosPrinter(DeviceConnection printerConnection) throws EscPosConnectionException {
+        this(printerConnection != null ? new EscPosPrinterCommands(printerConnection) : null, 203, 58f, 32);
+    }
+
+//    public EscPosPrinter()
+//    {
+//        super(203, 58f, 32);
+//        printer = new EscPosPrinterCommands(BluetoothPrintersConnections.selectFirstPaired());
+//        Log.i("Unity", "Constructed");
+//    }
 
     /**
      * Create new instance of EscPosPrinter.

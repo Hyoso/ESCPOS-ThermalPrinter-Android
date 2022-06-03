@@ -1,7 +1,6 @@
 package com.dantsu.thermalprinter;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -18,31 +17,24 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.dantsu.escposprinter.EscPosPrinter;
+import com.dantsu.escposprinter.PrinterWrapper;
 import com.dantsu.escposprinter.connection.DeviceConnection;
 import com.dantsu.escposprinter.connection.bluetooth.BluetoothConnection;
 import com.dantsu.escposprinter.connection.bluetooth.BluetoothPrintersConnections;
 import com.dantsu.escposprinter.connection.tcp.TcpConnection;
 import com.dantsu.escposprinter.connection.usb.UsbConnection;
 import com.dantsu.escposprinter.connection.usb.UsbPrintersConnections;
-import com.dantsu.escposprinter.exceptions.EscPosBarcodeException;
-import com.dantsu.escposprinter.exceptions.EscPosConnectionException;
-import com.dantsu.escposprinter.exceptions.EscPosEncodingException;
-import com.dantsu.escposprinter.exceptions.EscPosParserException;
-import com.dantsu.escposprinter.textparser.PrinterTextParserImg;
-import com.dantsu.thermalprinter.async.AsyncBluetoothEscPosPrint;
-import com.dantsu.thermalprinter.async.AsyncEscPosPrint;
-import com.dantsu.thermalprinter.async.AsyncEscPosPrinter;
-import com.dantsu.thermalprinter.async.AsyncTcpEscPosPrint;
-import com.dantsu.thermalprinter.async.AsyncUsbEscPosPrint;
+import com.dantsu.escposprinter.async.AsyncBluetoothEscPosPrint;
+import com.dantsu.escposprinter.async.AsyncEscPosPrint;
+import com.dantsu.escposprinter.async.AsyncEscPosPrinter;
+import com.dantsu.escposprinter.async.AsyncTcpEscPosPrint;
+import com.dantsu.escposprinter.async.AsyncUsbEscPosPrint;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -75,14 +67,28 @@ public class MainActivity extends AppCompatActivity {
                 printUsb();
             }
         });
+//        button = (Button) this.findViewById(R.id.button_tcp);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                printTcp();
+//            }
+//        });
+
         button = (Button) this.findViewById(R.id.button_tcp);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                printTcp();
+                printTest();
             }
         });
 
+        PrinterWrapper.Init();
+    }
+
+    public void printTest()
+    {
+        PrinterWrapper.Print("[C]================================\n");
     }
 
 
@@ -285,35 +291,35 @@ public class MainActivity extends AppCompatActivity {
         SimpleDateFormat format = new SimpleDateFormat("'on' yyyy-MM-dd 'at' HH:mm:ss");
         AsyncEscPosPrinter printer = new AsyncEscPosPrinter(printerConnection, 203, 48f, 32);
         return printer.addTextToPrint(
-            "[C]<img>" + PrinterTextParserImg.bitmapToHexadecimalString(printer, this.getApplicationContext().getResources().getDrawableForDensity(R.drawable.logo, DisplayMetrics.DENSITY_MEDIUM)) + "</img>\n" +
-                "[L]\n" +
+//            "[C]<img>" + PrinterTextParserImg.bitmapToHexadecimalString(printer, this.getApplicationContext().getResources().getDrawableForDensity(R.drawable.logo, DisplayMetrics.DENSITY_MEDIUM)) + "</img>\n" +
+//                "[L]\n" +
                 "[C]<u><font size='big'>ORDER N°045</font></u>\n" +
                 "[L]\n" +
-                "[C]<u type='double'>" + format.format(new Date()) + "</u>\n" +
-                "[C]\n" +
-                "[C]================================\n" +
-                "[L]\n" +
-                "[L]<b>BEAUTIFUL SHIRT</b>[R]9.99€\n" +
-                "[L]  + Size : S\n" +
-                "[L]\n" +
-                "[L]<b>AWESOME HAT</b>[R]24.99€\n" +
-                "[L]  + Size : 57/58\n" +
-                "[L]\n" +
-                "[C]--------------------------------\n" +
-                "[R]TOTAL PRICE :[R]34.98€\n" +
-                "[R]TAX :[R]4.23€\n" +
-                "[L]\n" +
-                "[C]================================\n" +
-                "[L]\n" +
-                "[L]<u><font color='bg-black' size='tall'>Customer :</font></u>\n" +
-                "[L]Raymond DUPONT\n" +
-                "[L]5 rue des girafes\n" +
-                "[L]31547 PERPETES\n" +
-                "[L]Tel : +33801201456\n" +
-                "\n" +
-                "[C]<barcode type='ean13' height='10'>831254784551</barcode>\n" +
-                "[L]\n" +
-                "[C]<qrcode size='20'>http://www.developpeur-web.dantsu.com/</qrcode>\n"
+                "[C]<u type='double'>" + format.format(new Date()) + "</u>\n"// +
+//                "[C]\n" +
+//                "[C]================================\n" +
+//                "[L]\n" +
+//                "[L]<b>BEAUTIFUL SHIRT</b>[R]9.99€\n" +
+//                "[L]  + Size : S\n" +
+//                "[L]\n" +
+//                "[L]<b>AWESOME HAT</b>[R]24.99€\n" +
+//                "[L]  + Size : 57/58\n" +
+//                "[L]\n" +
+//                "[C]--------------------------------\n" +
+//                "[R]TOTAL PRICE :[R]34.98€\n" +
+//                "[R]TAX :[R]4.23€\n" +
+//                "[L]\n" +
+//                "[C]================================\n" +
+//                "[L]\n" +
+//                "[L]<u><font color='bg-black' size='tall'>Customer :</font></u>\n" +
+//                "[L]Raymond DUPONT\n" +
+//                "[L]5 rue des girafes\n" +
+//                "[L]31547 PERPETES\n" +
+//                "[L]Tel : +33801201456\n" +
+//                "\n" +
+//                "[C]<barcode type='ean13' height='10'>831254784551</barcode>\n" +
+//                "[L]\n" +
+//                "[C]<qrcode size='20'>http://www.developpeur-web.dantsu.com/</qrcode>\n"
         );
     }
 }

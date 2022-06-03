@@ -48,3 +48,16 @@ afterEvaluate {
         }
     }
 }
+
+task deleteJar(type: Delete) {
+    delete 'libs/jars/escposprinter.jar'
+}
+
+task createJar(type: Copy) {
+    from('build/intermediates/bundles/release/')
+    into('libs/jars/')
+    include('classes.jar')
+    rename('classes.jar', 'escposprinter.jar')
+}
+
+createJar.dependsOn(deleteJar, build)

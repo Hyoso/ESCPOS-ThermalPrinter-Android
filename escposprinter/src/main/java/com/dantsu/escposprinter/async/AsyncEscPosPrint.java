@@ -1,4 +1,4 @@
-package com.dantsu.thermalprinter.async;
+package com.dantsu.escposprinter.async;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
